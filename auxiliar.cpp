@@ -39,7 +39,7 @@ int main(int argc, char const *argv[])
 
     std::cout << "Matriz 1:" <<std::endl;
     if (Mat1arq.is_open()){
-        Mat1arq  << " n x m "<<n1<<" "<< m1 << std::endl;
+        Mat1arq  << n1<<" "<< m1 << std::endl;
         for (size_t i = 0 ; i < n1; ++i){
             for (size_t j = 0; j < m1; ++j)
             {
@@ -58,7 +58,7 @@ int main(int argc, char const *argv[])
     std::cout << "Matriz 2:" <<std::endl;
     
     if (Mat2arq.is_open()){
-        Mat2arq  << " n x m "<< n2 <<" "<< m2 << std::endl;
+        Mat2arq  << n2 <<" "<< m2 << std::endl;
         for (size_t i = 0 ; i < n1; ++i){
             for (size_t j = 0; j < m1; ++j)
             {
