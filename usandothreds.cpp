@@ -4,6 +4,14 @@
 #include <fstream>
 #include <thread>
 
+void printVetor(const std::vector<float>  &linha){
+    for (auto &i : linha)
+    {
+        std::cout << i <<" ";
+    }
+    std::cout<<std::endl;
+}
+
 void calcElementoIJ( const std::vector<float>  &linha, const std::vector<float>  &coluna, float &produto){
     
     float elemento = 0;
@@ -39,56 +47,83 @@ std::vector<float> linhaMatriz(const std::vector<std::vector<float>> &M1, int in
 
 std::vector<float> colunaMatriz(const std::vector<std::vector<float>> &M1, int indice){
 
-    int N = M1[indice].size();
+    int N = M1.size();
 
     std::vector<float>  coluna(N);
 
-    for(int i = 0; i < N; ++i){
-        coluna[i] = M1[i][indice];
+    for(int k = 0; k < N; ++k){
+        coluna[k] = M1[k][indice];
+      //  std::cout<<"linha "<< k <<"col "<< indice<< "Elemento: "<< M1[k][indice]<<std::endl;
+        
     }
-
+    //printVetor(coluna);
     return coluna;
 }
 
 std::vector<std::vector<float>> Produto(const std::vector<std::vector<float>> &M1, 
-                                const std::vector<std::vector<float>> &M2){
+                                const std::vector<std::vector<float>> &M2, int indice_inicial, int qtdElementos){
 
     int n1 = M1.size();
-    int m2 = M2.size();
-    int contaThread=0;
+    int m2 = M2[0].size();
+    
+    int contaThread=0, cont= -1;
+    
     float elemento;
+    
     std::vector<std::vector<float>> Prod(n1, std::vector<float> (m2,0));
-
-    std::vector<std::thread> vetorThreads;
 
     std::vector<float> linha;
     std::vector<float> coluna;
 
-    //gitvetorThreads.emplace_back(calcElementoIJ
+    //int Coord_i = (int) (indice_inicial/m2);
+    //int Coord_j = indice_inicial%m2;
 
+    //std::cout << Coord_i <<", "<<Coord_j<< std::endl;
 
     for (size_t i = 0 ; i < n1; ++i){
 
         linha = linhaMatriz(M1,i);
 
-
+        //std::cout<<"Linha:"<<std::endl;
+        //printVetor(linha);
 
         for (size_t j = 0; j < m2; ++j)
         {
-            coluna = colunaMatriz(M2,j);
-           
-           calcElementoIJ(linha,coluna,elemento);
-           
-         //for (size_t k = 0; k < n1; ++k){
-            // elemento =  M1[i][k] * M2[k][j];
+            
+            cont ++;
 
-            // Prod[i][j] += elemento;
-        //}
+             if (cont < indice_inicial)
+             {
+            
+                 continue;
+                 contaThread = 0;
+            
+             }
+            
+            if (contaThread > qtdElementos){
+            
+                 break;
+            
+            }
+
+            coluna = colunaMatriz(M2,j);
+            
+           // std::cout<<"Coluna:"<<std::endl;
+            //printVetor(coluna);
+
+            calcElementoIJ(linha,coluna,elemento);
+           
+            Prod[i][j] = elemento;
 
             contaThread++;
 
-        }
+            
 
+        }
+        
+        if (contaThread > qtdElementos){
+            break;
+        }
 
     }
 
@@ -173,13 +208,13 @@ int main(int argc, char const *argv[])
             for (size_t j = 0; j < m2; ++j)
             {
                 Mat2arq >> elemento ;
-       //         std::cout <<elemento<< " ";
+                //std::cout <<elemento<< " ";
                 linha[j] = elemento;
             }
 
             M2[i]=linha;
 
-       //     std::cout <<std::endl;
+           // std::cout <<std::endl;
             
         }
     }
@@ -191,7 +226,17 @@ int main(int argc, char const *argv[])
 
     std::vector<std::vector<float>> Prod(n1, std::vector <float> (n2,0));
     
-    Prod = Produto(M1,M2);
+    std::vector<std::thread> threads;
+
+    int inicio = 0, qtdElem = 0, Nthreads = 0;
+
+    for (int i = 0 ; i < Nthreads; ++i){
+    
+        threads.emplace_back(Produto,inicio,qtdElem);
+
+        inicio += qtdElem;
+        
+    }
 
     auto end = std::chrono::high_resolution_clock::now();
 

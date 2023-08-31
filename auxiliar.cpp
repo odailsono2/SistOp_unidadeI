@@ -59,8 +59,8 @@ int main(int argc, char const *argv[])
     
     if (Mat2arq.is_open()){
         Mat2arq  << n2 <<" "<< m2 << std::endl;
-        for (size_t i = 0 ; i < n1; ++i){
-            for (size_t j = 0; j < m1; ++j)
+        for (size_t i = 0 ; i < n2; ++i){
+            for (size_t j = 0; j < m2; ++j)
             {
                 elemento = generator() % 100 /10.0f;
                 Mat2arq << elemento << " ";
