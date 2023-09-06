@@ -2,13 +2,14 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: cpp arquivo de build ativo",
-            "command": "/usr/bin/cpp",
+            "label": "C/C++: g++ arquivo de build ativo",
+            "command": "/usr/bin/g++",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
                 "-o",
+                "-pthread",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
             "options": {

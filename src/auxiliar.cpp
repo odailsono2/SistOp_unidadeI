@@ -31,17 +31,17 @@ int main(int argc, char const *argv[])
     std::minstd_rand0 generator (seed);  // minstd_rand0 is a standard linear_congruential_engine
     
     
-    std::ofstream Mat1arq("matriz1.txt");
+    std::ofstream Mat1arq("./output/matriz1.txt");
     
-    std::ofstream Mat2arq("matriz2.txt");
+    std::ofstream Mat2arq("./output/matriz2.txt");
     
     float elemento = 0;
 
     std::cout << "Matriz 1:" <<std::endl;
     if (Mat1arq.is_open()){
         Mat1arq  << n1<<" "<< m1 << std::endl;
-        for (size_t i = 0 ; i < n1; ++i){
-            for (size_t j = 0; j < m1; ++j)
+        for (int i = 0 ; i < n1; ++i){
+            for (int j = 0; j < m1; ++j)
             {
                 elemento = generator() % 100 /10.0f;
                 Mat1arq << elemento << " ";
@@ -59,8 +59,8 @@ int main(int argc, char const *argv[])
     
     if (Mat2arq.is_open()){
         Mat2arq  << n2 <<" "<< m2 << std::endl;
-        for (size_t i = 0 ; i < n2; ++i){
-            for (size_t j = 0; j < m2; ++j)
+        for (int i = 0 ; i < n2; ++i){
+            for (int j = 0; j < m2; ++j)
             {
                 elemento = generator() % 100 /10.0f;
                 Mat2arq << elemento << " ";
