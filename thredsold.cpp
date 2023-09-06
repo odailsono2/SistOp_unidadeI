@@ -2,11 +2,9 @@
 #include <sstream>
 #include <chrono>
 #include <vector>
-#include <map>
 #include <fstream>
 #include <thread>
 #include <mutex>
-
 
 std::mutex mtx;
 
@@ -54,14 +52,6 @@ std::vector<float> colunaMatriz(const std::vector<std::vector<float>> &M1, int i
     }
     //printVetor(coluna);
     return coluna;
-}
-
-void printVetor(const std::vector<int>  &linha){
-    for (auto &i : linha)
-    {
-        std::cout << i <<" ";
-    }
-    std::cout<<std::endl;
 }
 
 void printVetor(const std::vector<float>  &linha){
@@ -155,77 +145,34 @@ void Produto(const std::vector<std::vector<float>> &M1,
 
     std::vector<float> linha;
     std::vector<float> coluna;
-       mtx.lock();
 
-    int ci = (int) (indice_inicial / m2);
-
-    int fi = (int) ((indice_inicial + qtdElementos - 1) / m2);
-
-    int cj = (int) (indice_inicial % m2);
-
-    int fj = (int) ((indice_inicial + qtdElementos - 1) % m2);    
-
-    std::cout<< "indice_inicial " << indice_inicial<<" , " << qtdElementos << std::endl;
-    std::cout<< "ci, fi " << ci<<" , " << fi << std::endl;
-    std::cout<< "cj, fj " << cj<<" , " << fj << std::endl;
-    std::cout<< "_________________" <<std::endl;
-
-    std::vector<int> vlinha;
-    std::vector<int> vcoluna;
-
-    std::map <int,int> seq;
-
-    for (size_t q = indice_inicial ; q <= (indice_inicial + qtdElementos); ++q){
-        ci =(int) (q / m2);
-        //vlinha.push_back(ci);
-
-        cj = (int) (q % m2);
-
-        //vcoluna.push_back(cj);
-
-        seq.insert(std::pair<int,int> (ci,cj))
-    }
-
-
-    std::cout<< "linha:" <<std::endl;
-    printVetor(vlinha);
-    std::cout<< "Coluna:" <<std::endl;
-    printVetor(vcoluna);
-
-    for (auto c:seq){
-
-        M1[c.first]
-    }
-
-    for (auto i:vlinha){
-    //for (size_t i = 0 ; i < n1; ++i){
-
+   
+    for (size_t i = 0 ; i < n1; ++i){
 
         linha = linhaMatriz(M1,i);
 
         //std::cout<<"Linha:"<<std::endl;
         //printVetor(linha);
 
-        //for (size_t j = 0; j < m2; ++j)
-        for (auto j:vcoluna)
+        for (size_t j = 0; j < m2; ++j)
         {
             
-           // cont ++;
+            cont ++;
 
-           // if (cont < indice_inicial)
-            // {
+            if (cont < indice_inicial)
+            {
             
-            //     continue;
-            //     contaThread = 0;
+                continue;
+                contaThread = 0;
             
              
-            // }
+            }
             
-            // if (contaThread >= qtdElementos){
+            if (contaThread >= qtdElementos){
             
-            //      break;
+                 break;
             
-            // }
+            }
 
             coluna = colunaMatriz(M2,j);
             
@@ -236,18 +183,15 @@ void Produto(const std::vector<std::vector<float>> &M1,
            
             Prod[i][j] = elemento;
 
-            //printMatrix(Prod);
-
-          //  contaThread++;
+            contaThread++;
 
             
 
         }
         
-        // if (contaThread > qtdElementos){
-        //     break;
-        // }
-        mtx.unlock();
+        if (contaThread > qtdElementos){
+            break;
+        }
 
     }
 

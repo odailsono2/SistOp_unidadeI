@@ -3,32 +3,152 @@
 #include <vector>
 #include <fstream>
 
-std::vector<std::vector<float>> Produto(const std::vector<std::vector<float>> &M1, 
-                                const std::vector<std::vector<float>> &M2){
+std::vector<float> linhaMatriz(const std::vector<std::vector<float>> &M1, int indice){
 
+    int N = M1[indice].size();
+
+    std::vector<float>  linha(N);
+
+    for(int i = 0; i < N; ++i){
+        linha[i] = M1[indice][i];
+    }
+
+    return linha;
+}
+
+std::vector<float> colunaMatriz(const std::vector<std::vector<float>> &M1, int indice){
+
+    int N = M1.size();
+
+    std::vector<float>  coluna(N);
+
+    for(int k = 0; k < N; ++k){
+        coluna[k] = M1[k][indice];
+      //  std::cout<<"linha "<< k <<"col "<< indice<< "Elemento: "<< M1[k][indice]<<std::endl;
+        
+    }
+    //printVetor(coluna);
+    return coluna;
+}
+
+void printVetor(const std::vector<float>  &linha){
+    for (auto &i : linha)
+    {
+        std::cout << i <<" ";
+    }
+    std::cout<<std::endl;
+}
+
+void printMatrix(const std::vector<std::vector<float>>  &M){
+    
+    int n1 = M.size();
+    int m1 = M[0].size();
+    std::vector<float> linha(m1);
+
+    for (size_t i = 0; i < n1; ++i)
+    {
+        linha = linhaMatriz(M,i);
+        
+        printVetor(linha);
+    }
+}
+
+void calcElementoIJ( const std::vector<float>  &linha, const std::vector<float>  &coluna, float &produto){
+    
+    float elemento = 0;
+
+    int n1=linha.size();
+
+    produto = 0;
+
+    for (size_t k = 0; k < n1; ++k){
+
+        elemento =  linha[k] * coluna[k];
+
+   
+        produto += elemento;
+    }
+
+
+
+}
+
+std::vector<std::vector<float>> Produto(const std::vector<std::vector<float>> &M1, 
+            const std::vector<std::vector<float>> &M2){
+    
+       
     int n1 = M1.size();
-    int m2 = M2.size();
+    
+    int m2 = M2[0].size();
+    
     float elemento;
+    
     std::vector<std::vector<float>> Prod(n1, std::vector<float> (m2,0));
 
+    std::vector<float> linha;
+    std::vector<float> coluna;
+
+
     for (size_t i = 0 ; i < n1; ++i){
+
+        linha = linhaMatriz(M1,i);
+
+        //std::cout<<"Linha:"<<std::endl;
+        //printVetor(linha);
+
         for (size_t j = 0; j < m2; ++j)
         {
-            for (size_t k = 0; k < n1; ++k){
+            
+    
+            coluna = colunaMatriz(M2,j);
+            
+            //std::cout<<"Coluna:"<<std::endl;
+            //printVetor(coluna);
 
-                elemento =  M1[i][k] * M2[k][j];
+            calcElementoIJ(linha,coluna,elemento);
+           
+            Prod[i][j] = elemento;
 
-                //std::cout <<elemento<< " ";
+        
 
-                Prod[i][j] += elemento;
-            }
         }
-//        std::cout <<std::endl;
 
     }
 
     return Prod;
+}
 
+
+void salvaArq(const std::vector<std::vector<float>> &M, const long long & microseconds, const std::string &nome){
+
+    int n1 = M.size();
+    
+    int m1 = M[0].size();
+
+    std::string Arq;
+
+
+    Arq  = nome;
+    
+    Arq.append(".txt");
+
+    std::ofstream Mat1arq(Arq);
+
+    if (Mat1arq.is_open()){
+        Mat1arq << nome <<std::endl;
+        Mat1arq  << n1<<" "<< m1 << std::endl;
+        for (size_t i = 0 ; i < n1; ++i){
+            for (size_t j = 0; j < m1; ++j)
+            {
+                Mat1arq << M[i][j] << " ";
+            }
+            Mat1arq << std::endl;
+            
+        }
+        Mat1arq << microseconds<<std::endl;
+    }
+
+    Mat1arq.close();
 }
 
 int main(int argc, char const *argv[])
@@ -136,8 +256,10 @@ int main(int argc, char const *argv[])
     // Converte a duração para um valor numérico (microsegundos)
     long long microseconds = duration.count();
     
-    std::cout << "Tempo de execução: " << microseconds << " microssegundos" << std::endl;
-    
+   // std::cout << "Tempo de execução: " << microseconds << " microssegundos" << std::endl;
+
+    salvaArq(Prod,microseconds,"sequencial");
+   /* 
     std::ofstream Produto("ProdutoM1M2.txt");
     
     elemento = 0;
@@ -162,7 +284,7 @@ int main(int argc, char const *argv[])
     Produto.close();
 
 
-    
+  */  
     
 
 
