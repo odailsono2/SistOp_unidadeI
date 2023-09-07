@@ -258,7 +258,7 @@ int main(int argc, char const *argv[])
     
    // std::cout << "Tempo de execução: " << microseconds << " microssegundos" << std::endl;
 
-    salvaArq(Prod,microseconds,"sequencial");
+    salvaArq(Prod,microseconds,"./output/SeqProd");
    /* 
     std::ofstream Produto("ProdutoM1M2.txt");
     
