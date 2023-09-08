@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <thread>
+#include <algorithm>
 #include "../includes/matriz.hpp"
 #include "../includes/arquivos.hpp"
 
@@ -20,6 +21,7 @@ class ThreadsObj{
     std::vector<int> indices;
     std::chrono::high_resolution_clock::time_point t1;
     std::chrono::high_resolution_clock::time_point t2;
+    long long microseconds;
 
     void start(){
        this->t1 = std::chrono::high_resolution_clock::now();
@@ -28,6 +30,12 @@ class ThreadsObj{
     void stop(){
        this->t2 = std::chrono::high_resolution_clock::now();
 
+
+    }
+
+    void duracao(){
+       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(this->t2 - this->t1);
+       this->microseconds = duration.count();
 
     }
     void setIndices(int inicio, int passo, int fim){
@@ -104,6 +112,8 @@ int main(int argc, char const *argv[])
     }
 
     int k = 0;
+
+    std::vector<long long> tempos;
     
     for (auto &th:threads){
         
@@ -113,15 +123,22 @@ int main(int argc, char const *argv[])
         
         // Calcula a diferença de tempo
 
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(th.t2 - th.t1);
+        // auto duration = std::chrono::duration_cast<std::chrono::microseconds>(th.t2 - th.t1);
         
         // Converte a duração para um valor numérico (microsegundos)
         
-        long long microseconds = duration.count();
+        // long long microseconds = duration.count();
 
-        salvaArq(th.Prod,microseconds,std::to_string(k));
+        th.duracao();
+
+        tempos.push_back(th.microseconds);
+
+        salvaArq(th.Prod,th.microseconds,std::to_string(k));
         k++;
     }
+
+    
+    std::cout<<"Maior tempo : "<<static_cast<long long> ( * std::max_element( tempos.begin() , tempos.end() ) ) <<std::endl ;
     
    return 0;
 

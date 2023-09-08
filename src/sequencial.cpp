@@ -256,7 +256,7 @@ int main(int argc, char const *argv[])
     // Converte a duração para um valor numérico (microsegundos)
     long long microseconds = duration.count();
     
-   // std::cout << "Tempo de execução: " << microseconds << " microssegundos" << std::endl;
+    std::cout << "Tempo de execução: " << microseconds << " microssegundos" << std::endl;
 
     salvaArq(Prod,microseconds,"./output/SeqProd");
    /* 

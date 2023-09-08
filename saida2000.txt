@@ -1,0 +1,12 @@
+./build/sequencial ./output/matriz1.txt ./output/matriz2.txt
+Tempo de execução: 87993036 microssegundos
+Tempo de execução: 88317257 microssegundos
+Tempo de execução: 87642853 microssegundos
+Tempo de execução: 87499202 microssegundos
+Tempo de execução: 87143762 microssegundos
+Tempo de execução: 88166143 microssegundos
+Tempo de execução: 88052878 microssegundos
+Tempo de execução: 87113409 microssegundos
+Tempo de execução: 88259846 microssegundos
+Tempo de execução: 85443245 microssegundos
+Comando executado com sucesso.
