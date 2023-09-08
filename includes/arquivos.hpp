@@ -38,6 +38,43 @@ void salvaArq(const std::vector<std::vector<float>> &M, const long long & micros
     Mat1arq.close();
 }
 
+void salvaArq(const std::vector<float> &dados, int n1, int m1, const std::vector<int> &indices, const long long & microseconds, const std::string &nome){
+    
+    //formato de arquivo de saida
+    // n1 m1
+    // indice[0] dados[0] 
+    // indice[1] dados[1] 
+    // ... 
+    // indice[end]  dados[end]
+    // microseconds
+
+    std::string Arq = "./output/Prod_th";
+
+
+    Arq.append(nome);
+    
+    Arq.append(".txt");
+
+    std::ofstream Mat1arq(Arq);
+
+    if (Mat1arq.is_open()){
+        Mat1arq << nome <<std::endl;
+        Mat1arq  << n1<<" "<< m1 << std::endl;
+        
+        int tam = indices.size();
+        
+        for (size_t i = 0 ; i < tam; ++i){
+           Mat1arq << indices[i] << " " << dados[i] << std::endl;
+        }
+        
+
+        Mat1arq << microseconds<<std::endl;
+    }
+
+    Mat1arq.close();
+}
+
+
 std::vector<std::vector<float>> abrirArquivoMatriz(std::string M1nomeArq){
 
     std::ifstream Mat1arq(M1nomeArq);

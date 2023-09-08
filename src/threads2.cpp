@@ -17,7 +17,7 @@ class ThreadsObj{
 
     public:
     std::thread th;
-    std::vector<std::vector<float>> Prod;
+    std::vector<float> Prod;
     std::vector<int> indices;
     std::chrono::high_resolution_clock::time_point t1;
     std::chrono::high_resolution_clock::time_point t2;
@@ -82,11 +82,11 @@ int main(int argc, char const *argv[])
     //std::cout<<"M2:"<<std::endl;
     //printMatrix(M2);
     
-    auto start = std::chrono::high_resolution_clock::now();
+    //auto start = std::chrono::high_resolution_clock::now();
 
-    std::vector<std::vector<float>> Prod(n1, std::vector <float> (n2,0));
+    //std::vector<std::vector<float>> Prod(n1, std::vector <float> (n2,0));
 
-    std::vector<int> indices = rangeIndices(0,1,3);
+    //std::vector<int> indices = rangeIndices(0,1,3);
 
     std::vector<ThreadsObj> threads(Nthreads);
 
@@ -133,7 +133,7 @@ int main(int argc, char const *argv[])
 
         tempos.push_back(th.microseconds);
 
-        salvaArq(th.Prod,th.microseconds,std::to_string(k));
+        salvaArq(th.Prod,n1,m2,th.indices,th.microseconds,std::to_string(k));
         k++;
     }
 

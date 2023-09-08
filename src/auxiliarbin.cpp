@@ -31,27 +31,35 @@ int main(int argc, char const *argv[])
     std::minstd_rand0 generator (seed);  // minstd_rand0 is a standard linear_congruential_engine
     
     
-    std::ofstream Mat1arq("./output/matriz1.txt");
+    std::ofstream Mat1arq("./output/matriz1.bin", std::ios::binary);
     
-    std::ofstream Mat2arq("./output/matriz2.txt");
+    std::ofstream Mat2arq("./output/matriz2.bin", std::ios::binary);
     
-    float elemento = 0;
+    std::vector<std::vector<float>> elemento;
 
+    for (int i = 0 ; i < n1; ++i){
+        elemento.push_back(std::vector<float> (n1,m1));
+        for (int j = 0; j < m1; ++j)
+        {
+            elemento[i].push_back ( generator() % 100);
 
-    //std::cout << "Matriz 1:" <<std::endl;
-    if (Mat1arq.is_open()){
-        Mat1arq  << n1<<" "<< m1 << std::endl;
-        for (int i = 0 ; i < n1; ++i){
-            for (int j = 0; j < m1; ++j)
-            {
-                elemento = generator() % 100;
-                Mat1arq << elemento << " ";
-               // std::cout <<elemento<< " ";
-            }
-            Mat1arq << std::endl;
-            //std::cout <<std::endl;
-            
         }
+        
+    }
+
+    if (Mat1arq.is_open()){
+        // Obtenha o tamanho do vetor
+        size_t tamanho = elemento.size();
+
+        // Escreva o tamanho do vetor no arquivo (para fins de leitura posterior)
+        Mat1arq.write(reinterpret_cast<const char*>(&tamanho), sizeof(tamanho));
+
+        // Escreva os dados do vetor no arquivo
+        arquivo.write(reinterpret_cast<const char*>(dados.data()), sizeof(int) * tamanho);
+
+        // Feche o arquivo
+        arquivo.close();
+        std::cout << "Vetor salvo com sucesso." << std::endl;
     }
 
     Mat1arq.close();

@@ -187,9 +187,52 @@ std::vector<std::vector<float>> Produtothread(const std::vector<std::vector<floa
     return Prod;
 }
 
+std::vector<float> ProdutothreadVector(const std::vector<std::vector<float>> &M1, 
+            const std::vector<std::vector<float>> &M2, std::vector<int> indices ){
+    
+       
+    int n1 = M1.size();
+    
+    int m2 = M2[0].size();
+    
+    float elemento;
+    
+    std::vector<float> Prod;
+
+    std::vector<float> linha;
+    std::vector<float> coluna;
+
+    int i, j;
+
+    for (auto coord_ij:indices){
+
+        i = indice_TO_linCol(coord_ij,n1,m2).first;
+        j = indice_TO_linCol(coord_ij,n1,m2).second;
+        
+        linha = linhaMatriz(M1,i);
+
+        //std::cout<<"Linha:"<<std::endl;
+        //printVetor(linha);
+
+      
+        coluna = colunaMatriz(M2,j);
+            
+        //std::cout<<"Coluna:"<<std::endl;
+        //printVetor(coluna);
+
+        calcElementoIJ(linha,coluna,elemento);
+        
+        Prod.push_back( elemento);
+
+
+    }
+
+    return Prod;
+}
+
 void Produtothread2(const std::vector<std::vector<float>> &M1, 
-            const std::vector<std::vector<float>> &M2, const std::vector<int> &indices , std::vector<std::vector<float>> &Prod){
-                Prod = Produtothread(M1,M2,indices);
+            const std::vector<std::vector<float>> &M2, const std::vector<int> &indices , std::vector<float> &Prod){
+                Prod = ProdutothreadVector(M1,M2,indices);
 }
 
 
