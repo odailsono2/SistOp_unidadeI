@@ -247,6 +247,9 @@ void Produtothread2(const std::vector<std::vector<float>> &M1,
     
     // Converte a duração para um valor numérico (microsegundos)
     microsecond = duration.count();
+    
+    std::cout<<"-------Thread "<<std::this_thread::get_id()<< " concluida. Tempo: "<<microsecond<<" us"<<std::endl;
+            
 }
 
 

@@ -18,6 +18,7 @@ class ThreadsObj{
     public:
     std::thread th;
     std::vector<float> Prod;
+
     std::vector<int> indices;
     std::chrono::high_resolution_clock::time_point t1;
     std::chrono::high_resolution_clock::time_point t2;
@@ -64,7 +65,11 @@ int main(int argc, char const *argv[])
     M1nomeArq = argv[1];
     M2nomeArq = argv[2];
     int P = std::stoi(argv[3]);
+    int salvar = 1; // 1- salva arquivo das matrizes. 0 -não
 
+    if (argv[4]){
+        salvar = std::stoi(argv[4]);
+    }
            
     M1=abrirArquivoMatriz(M1nomeArq);
 
@@ -93,6 +98,7 @@ int main(int argc, char const *argv[])
     int inicio = 0;
     int passo = 1;
     int fim = P;
+
     for (auto &th:threads){
 
         th.indices.clear();
@@ -103,19 +109,25 @@ int main(int argc, char const *argv[])
         
         fim = fim + P;
         
-        //th.start();
+      
+                
         
+    }
+
+    for (auto &th:threads){
+     
+        //th.start();
+
         th.th = std::thread (Produtothread2,M1,M2,th.indices, std::ref(th.Prod),std::ref(th.microseconds));
         
         //th.stop();
-        
-                
+                  
         
     }
 
     int k = 0;
 
-    std::vector<long long> tempos;
+
 
     int conta_threads = 0;
 
@@ -123,19 +135,18 @@ int main(int argc, char const *argv[])
     while (conta_threads <= Nthreads-1){
 
 
-
-
         if (threads[k].th.joinable()){
 
             threads[k].th.join();
+            //std::cout<<"-------Thread "<<k<< " concluida. Tempo: "<<threads[k].microseconds<<"us"<<std::endl;
             
             //threads[k].duracao();
 
-            tempos.push_back(threads[k].microseconds);
+            // tempos.push_back(threads[k].microseconds);
 
-            conta_threads ++;
+             conta_threads ++;
 
-            salvaArq(threads[k].Prod,n1,m2,threads[k].indices, threads[k].microseconds,std::to_string(k));
+            // salvaArq(threads[k].Prod,n1,m2,threads[k].indices, threads[k].microseconds,std::to_string(k));
            
 
         }
@@ -146,6 +157,20 @@ int main(int argc, char const *argv[])
             k = 0;
         }
     }
+
+    std::vector<long long> tempos;
+    k = 0;
+    for(auto &th:threads){
+
+            tempos.push_back(th.microseconds);
+
+            if (salvar == 1){
+                salvaArq(th.Prod,n1,m2,th.indices, th.microseconds,std::to_string(k)+std::to_string(P));
+                std::cout<<"Matriz da Thread "<< k <<" salva"<<std::endl;
+                k++;
+            }
+    }
+
     auto max_element_iterator = std::max_element(tempos.begin(), tempos.end());
 
     int indice_do_maior_elemento = std::distance(tempos.begin(), max_element_iterator);
@@ -156,30 +181,3 @@ int main(int argc, char const *argv[])
     return 0;
 
 }   
-//     for (auto &th:threads){
-//         th.th.join();
-//         //if(threads[i].th.joinable()){
-
-
-//         // Calcula a diferença de tempo
-
-//         // auto duration = std::chrono::duration_cast<std::chrono::microseconds>(th.t2 - th.t1);
-        
-//         // Converte a duração para um valor numérico (microsegundos)
-        
-//         // long long microseconds = duration.count();
-
-//         th.duracao();
-
-//         tempos.push_back(th.microseconds);
-
-//         salvaArq(th.Prod,n1,m2,th.indices,th.microseconds,std::to_string(k));
-//         k++;
-//     }
-
-    
-//     std::cout<<"Maior tempo : "<<static_cast<long long> ( * std::max_element( tempos.begin() , tempos.end() ) ) << " microssegundos."<<std::endl ;
-    
-//    return 0;
-
-// }

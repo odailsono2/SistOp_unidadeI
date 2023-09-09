@@ -30,9 +30,19 @@ int main(int argc, char const *argv[]){
     const char* exe_comando = comando.c_str();
 
     int status;
-    for (int i = 0; i<10;++i)
-         status = std::system(exe_comando);
-
+    int Nvezes = 10;
+    for (int i = 0; i<Nvezes;++i)
+        if (i == Nvezes-1){
+            comando.clear();
+            comando.append(diretorio + " " + output + " " + (argv[1]));           
+            exe_comando = comando.c_str(); 
+            status = std::system(exe_comando);
+        }
+        else{
+            comando.append(" 0");
+            exe_comando = comando.c_str();
+            status = std::system(exe_comando);
+        }
     // Verificar o status de saída do comando
     if (status == 0) {
         std::cout << "Comando executado com sucesso." << std::endl;
