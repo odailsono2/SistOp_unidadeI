@@ -103,43 +103,83 @@ int main(int argc, char const *argv[])
         
         fim = fim + P;
         
-        th.start();
+        //th.start();
         
-        th.th = std::thread (Produtothread2,M1,M2,th.indices, std::ref(th.Prod));
+        th.th = std::thread (Produtothread2,M1,M2,th.indices, std::ref(th.Prod),std::ref(th.microseconds));
         
-        th.stop();
-
+        //th.stop();
+        
+                
+        
     }
 
     int k = 0;
 
     std::vector<long long> tempos;
-    
-    for (auto &th:threads){
-        
-        //if(threads[i].th.joinable()){
-        th.th.join();
-        th.stop();
-        
-        // Calcula a diferença de tempo
 
-        // auto duration = std::chrono::duration_cast<std::chrono::microseconds>(th.t2 - th.t1);
-        
-        // Converte a duração para um valor numérico (microsegundos)
-        
-        // long long microseconds = duration.count();
+    int conta_threads = 0;
 
-        th.duracao();
 
-        tempos.push_back(th.microseconds);
+    while (conta_threads <= Nthreads-1){
 
-        salvaArq(th.Prod,n1,m2,th.indices,th.microseconds,std::to_string(k));
+
+
+
+        if (threads[k].th.joinable()){
+
+            threads[k].th.join();
+            
+            //threads[k].duracao();
+
+            tempos.push_back(threads[k].microseconds);
+
+            conta_threads ++;
+
+            salvaArq(threads[k].Prod,n1,m2,threads[k].indices, threads[k].microseconds,std::to_string(k));
+           
+
+        }
+
         k++;
+
+        if (k >= Nthreads){
+            k = 0;
+        }
     }
+    auto max_element_iterator = std::max_element(tempos.begin(), tempos.end());
+
+    int indice_do_maior_elemento = std::distance(tempos.begin(), max_element_iterator);
+    std::cout<<"Thread com maior tempo: "<< indice_do_maior_elemento<<std::endl;
+    std::cout<<"Maior tempo : "<< static_cast<long long> (*max_element_iterator)<<std::endl;
+   // std::cout<<"Maior tempo : "<<static_cast<long long> ( * std::max_element( tempos.begin() , tempos.end() ) ) << " microssegundos."<<std::endl ;
+    
+    return 0;
+
+}   
+//     for (auto &th:threads){
+//         th.th.join();
+//         //if(threads[i].th.joinable()){
+
+
+//         // Calcula a diferença de tempo
+
+//         // auto duration = std::chrono::duration_cast<std::chrono::microseconds>(th.t2 - th.t1);
+        
+//         // Converte a duração para um valor numérico (microsegundos)
+        
+//         // long long microseconds = duration.count();
+
+//         th.duracao();
+
+//         tempos.push_back(th.microseconds);
+
+//         salvaArq(th.Prod,n1,m2,th.indices,th.microseconds,std::to_string(k));
+//         k++;
+//     }
 
     
-    std::cout<<"Maior tempo : "<<static_cast<long long> ( * std::max_element( tempos.begin() , tempos.end() ) ) <<std::endl ;
+//     std::cout<<"Maior tempo : "<<static_cast<long long> ( * std::max_element( tempos.begin() , tempos.end() ) ) << " microssegundos."<<std::endl ;
     
-   return 0;
+//    return 0;
 
-}
+// }

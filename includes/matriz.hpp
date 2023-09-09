@@ -188,7 +188,7 @@ std::vector<std::vector<float>> Produtothread(const std::vector<std::vector<floa
 }
 
 std::vector<float> ProdutothreadVector(const std::vector<std::vector<float>> &M1, 
-            const std::vector<std::vector<float>> &M2, std::vector<int> indices ){
+            const std::vector<std::vector<float>> &M2, const std::vector<int> &indices ){
     
        
     int n1 = M1.size();
@@ -231,8 +231,22 @@ std::vector<float> ProdutothreadVector(const std::vector<std::vector<float>> &M1
 }
 
 void Produtothread2(const std::vector<std::vector<float>> &M1, 
-            const std::vector<std::vector<float>> &M2, const std::vector<int> &indices , std::vector<float> &Prod){
-                Prod = ProdutothreadVector(M1,M2,indices);
+            const std::vector<std::vector<float>> &M2, 
+            const std::vector<int> &indices , 
+            std::vector<float> &Prod, 
+            long long &microsecond){
+
+    auto start = std::chrono::high_resolution_clock::now();
+
+    Prod = ProdutothreadVector(M1,M2,indices);
+
+    auto end = std::chrono::high_resolution_clock::now();
+
+    // Calcula a diferença de tempo
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    
+    // Converte a duração para um valor numérico (microsegundos)
+    microsecond = duration.count();
 }
 
 

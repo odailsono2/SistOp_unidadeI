@@ -44,7 +44,7 @@ int main(int argc, char const *argv[])
         for (int i = 0 ; i < n1; ++i){
             for (int j = 0; j < m1; ++j)
             {
-                elemento = generator() % 100;
+                elemento = generator() % 10;
                 Mat1arq << elemento << " ";
                // std::cout <<elemento<< " ";
             }
