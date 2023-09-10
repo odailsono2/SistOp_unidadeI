@@ -52,9 +52,8 @@ void salvaArq(const std::vector<float> &dados, int n1, int m1, const std::vector
 
 
     Arq.append(nome);
+    Arq.append("_");
     
-    Arq.append(".txt");
-
     std::ofstream Mat1arq(Arq);
 
     if (Mat1arq.is_open()){

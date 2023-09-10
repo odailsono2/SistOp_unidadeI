@@ -70,12 +70,18 @@ int main(int argc, char const *argv[])
     if (argv[4]){
         salvar = std::stoi(argv[4]);
     }
+
+    // std::cout<<M1nomeArq<<std::endl;
+
+    // std::cout<<M2nomeArq<<std::endl;
            
     M1=abrirArquivoMatriz(M1nomeArq);
 
     n1= M1.size();
 
     M2=abrirArquivoMatriz(M2nomeArq);
+
+
 
     m2 = M2[0].size();
 
@@ -160,6 +166,7 @@ int main(int argc, char const *argv[])
 
     std::vector<long long> tempos;
     k = 0;
+    
     for(auto &th:threads){
 
             tempos.push_back(th.microseconds);

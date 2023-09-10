@@ -24,16 +24,17 @@ int main(int argc, char const *argv[])
         return 0;
     }
 
-    
+    std::string mat1 = std::to_string(n1);
+
     // obtain a seed from the system clock:
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
     std::minstd_rand0 generator (seed);  // minstd_rand0 is a standard linear_congruential_engine
     
     
-    std::ofstream Mat1arq("./output/matriz1.txt");
+    std::ofstream Mat1arq("./output/matriz1_" + mat1);
     
-    std::ofstream Mat2arq("./output/matriz2.txt");
+    std::ofstream Mat2arq("./output/matriz2_" + mat1);
     
     float elemento = 0;
 
