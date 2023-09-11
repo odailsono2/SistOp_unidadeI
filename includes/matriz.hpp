@@ -93,9 +93,9 @@ std::pair<int,int> indice_TO_linCol(int indice, int lin_max, int col_max){
 }
 
 
-void calcElementoIJ( const std::vector<float>  &linha, const std::vector<float>  &coluna, float &produto){
+void calcElementoIJ( const std::vector<int>  &linha, const std::vector<int>  &coluna, int &produto){
     
-    float elemento = 0;
+    int elemento = 0;
 
     int n1=linha.size();
 
@@ -114,11 +114,11 @@ void calcElementoIJ( const std::vector<float>  &linha, const std::vector<float> 
 }
 
 
-std::vector<float> linhaMatriz(const std::vector<std::vector<float>> &M1, int indice){
+std::vector<int> linhaMatriz(const std::vector<std::vector<int>> &M1, int indice){
 
     int N = M1[indice].size();
 
-    std::vector<float>  linha(N);
+    std::vector<int>  linha(N);
 
     for(int i = 0; i < N; ++i){
         linha[i] = M1[indice][i];
@@ -128,11 +128,11 @@ std::vector<float> linhaMatriz(const std::vector<std::vector<float>> &M1, int in
 }
 
 
-std::vector<float> colunaMatriz(const std::vector<std::vector<float>> &M1, int indice){
+std::vector<int> colunaMatriz(const std::vector<std::vector<int>> &M1, int indice){
 
     int N = M1.size();
 
-    std::vector<float>  coluna(N);
+    std::vector<int>  coluna(N);
 
     for(int k = 0; k < N; ++k){
         coluna[k] = M1[k][indice];
@@ -144,20 +144,20 @@ std::vector<float> colunaMatriz(const std::vector<std::vector<float>> &M1, int i
 }
 
 
-std::vector<std::vector<float>> Produtothread(const std::vector<std::vector<float>> &M1, 
-            const std::vector<std::vector<float>> &M2, std::vector<int> indices ){
+std::vector<std::vector<int>> Produtothread(const std::vector<std::vector<int>> &M1, 
+            const std::vector<std::vector<int>> &M2, std::vector<int> indices ){
     
        
     int n1 = M1.size();
     
     int m2 = M2[0].size();
     
-    float elemento;
+    int elemento;
     
-    std::vector<std::vector<float>> Prod(n1, std::vector<float> (m2,0));
+    std::vector<std::vector<int>> Prod(n1, std::vector<int> (m2,0));
 
-    std::vector<float> linha;
-    std::vector<float> coluna;
+    std::vector<int> linha;
+    std::vector<int> coluna;
 
     int i, j;
 
@@ -187,20 +187,20 @@ std::vector<std::vector<float>> Produtothread(const std::vector<std::vector<floa
     return Prod;
 }
 
-std::vector<float> ProdutothreadVector(const std::vector<std::vector<float>> &M1, 
-            const std::vector<std::vector<float>> &M2, const std::vector<int> &indices ){
+std::vector<int> ProdutothreadVector(const std::vector<std::vector<int>> &M1, 
+            const std::vector<std::vector<int>> &M2, const std::vector<int> &indices ){
     
        
     int n1 = M1.size();
     
     int m2 = M2[0].size();
     
-    float elemento;
+    int elemento;
     
-    std::vector<float> Prod;
+    std::vector<int> Prod;
 
-    std::vector<float> linha;
-    std::vector<float> coluna;
+    std::vector<int> linha;
+    std::vector<int> coluna;
 
     int i, j;
 
@@ -210,15 +210,8 @@ std::vector<float> ProdutothreadVector(const std::vector<std::vector<float>> &M1
         j = indice_TO_linCol(coord_ij,n1,m2).second;
         
         linha = linhaMatriz(M1,i);
-
-        //std::cout<<"Linha:"<<std::endl;
-        //printVetor(linha);
-
-      
-        coluna = colunaMatriz(M2,j);
-            
-        //std::cout<<"Coluna:"<<std::endl;
-        //printVetor(coluna);
+    
+        coluna = colunaMatriz(M2,j);            
 
         calcElementoIJ(linha,coluna,elemento);
         
@@ -230,10 +223,10 @@ std::vector<float> ProdutothreadVector(const std::vector<std::vector<float>> &M1
     return Prod;
 }
 
-void Produtothread2(const std::vector<std::vector<float>> &M1, 
-            const std::vector<std::vector<float>> &M2, 
+void Produtothread2(const std::vector<std::vector<int>> &M1, 
+            const std::vector<std::vector<int>> &M2, 
             const std::vector<int> &indices , 
-            std::vector<float> &Prod, 
+            std::vector<int> &Prod, 
             long long &microsecond){
 
     auto start = std::chrono::high_resolution_clock::now();
@@ -267,11 +260,11 @@ void printVetor(const std::vector<int>  &linha){
     }
     std::cout<<std::endl;
 }
-void printMatrix(const std::vector<std::vector<float>>  &M){
+void printMatrix(const std::vector<std::vector<int>>  &M){
     
     int n1 = M.size();
     int m1 = M[0].size();
-    std::vector<float> linha(m1);
+    std::vector<int> linha(m1);
 
     for (size_t i = 0; i < n1; ++i)
     {
@@ -291,57 +284,6 @@ std::vector<int> rangeIndices(int inicio, int passo, int fim){
     return indices;
 
 }
-/*
 
-int main(int argc, char const *argv[])
-{
-    int n = 6, m = 14;
-
-    for (size_t i = 0; i < n; i++)
-
-    {
-        for (size_t j= 0; j < m; j++)
-        {
-            std::cout << " c [" << i << ", " <<j << "]";
-        }
-
-        std::cout<<std::endl;
-        
-        
-    }
-
-    for (size_t i = 0; i < n; i++)
-
-    {
-        for (size_t j= 0; j < m; j++)
-        {
-            std::cout << " c [" << LinCol_To_Indice(i,j,n,m) << "]";
-        }
-        std::cout<<std::endl;
-        
-    }
-
-    std:: cout << "comvertendo indice em coordenadas na matriz"<<std::endl;
-
-    std::pair<int,int> coord;
-    int coluna = m;
-
-    for (size_t indice = 0; indice < n*m; indice++)
-
-    {
-        coord = indice_TO_linCol(indice,n,m);
-        std::cout << " c [" << coord.first << ", " << coord.second << "]" ;
-        
-        if (coord.second >= coluna-1){
-            
-            std::cout<<std::endl;
-        }
-    }
-
-    std::cout << indice_TO_linCol( LinCol_To_Indice(10,3,n,m) ,n,m).first << ", " << indice_TO_linCol( LinCol_To_Indice(10,3,n,m) ,n,m).second<< std::endl;
-    
-    return 0;
-}
-*/
 
 #endif

@@ -6,7 +6,7 @@
 #include <fstream>
 
 
-void salvaArq(const std::vector<std::vector<float>> &M, const long long & microseconds, const std::string &nome){
+void salvaArq(const std::vector<std::vector<int>> &M, const long long & microseconds, const std::string &nome){
 
     int n1 = M.size();
     
@@ -38,7 +38,7 @@ void salvaArq(const std::vector<std::vector<float>> &M, const long long & micros
     Mat1arq.close();
 }
 
-void salvaArq(const std::vector<float> &dados, int n1, int m1, const std::vector<int> &indices, const long long & microseconds, const std::string &nome){
+void salvaArq(const std::vector<int> &dados, int n1, int m1, const std::vector<int> &indices, const long long & microseconds, const std::string &nome){
     
     //formato de arquivo de saida
     // n1 m1
@@ -75,26 +75,18 @@ void salvaArq(const std::vector<float> &dados, int n1, int m1, const std::vector
 }
 
 
-std::vector<std::vector<float>> abrirArquivoMatriz(std::string M1nomeArq){
+std::vector<std::vector<int>> abrirArquivoMatriz(std::string M1nomeArq){
 
     std::ifstream Mat1arq(M1nomeArq);
-
     int n1, m1;
+    int elemento = 0;
+    std::vector<int> linha;
+    std::vector<std::vector<int>> M1;
 
-    float elemento = 0;
-
-    std::vector<float> linha;
-
-    std::vector<std::vector<float>> M1;
-
-   // std::cout << "Lendo Matriz 1 do arquivo:" << M1nomeArq <<std::endl;
     
     if (Mat1arq.is_open()){
         Mat1arq  >> n1 >> m1;
-  //      std::cout  << " n x m "<<n1<<" x "<< m1 << std::endl;
-
         linha.resize(m1);
-
         M1.resize(n1);
 
         for (size_t i = 0 ; i < n1; ++i){
@@ -104,14 +96,10 @@ std::vector<std::vector<float>> abrirArquivoMatriz(std::string M1nomeArq){
             for (size_t j = 0; j < m1; ++j)
             {
                 Mat1arq >> elemento ;
-   //             std::cout <<elemento<< " ";
                 linha[j] = elemento;
             }
 
             M1[i]=linha;
-
-   //         std::cout <<std::endl;
-            
         }
     }
 
