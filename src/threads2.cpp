@@ -20,25 +20,9 @@ class ThreadsObj{
     std::vector<float> Prod;
 
     std::vector<int> indices;
-    std::chrono::high_resolution_clock::time_point t1;
-    std::chrono::high_resolution_clock::time_point t2;
+    
     long long microseconds;
 
-    void start(){
-       this->t1 = std::chrono::high_resolution_clock::now();
-
-    }
-    void stop(){
-       this->t2 = std::chrono::high_resolution_clock::now();
-
-
-    }
-
-    void duracao(){
-       auto duration = std::chrono::duration_cast<std::chrono::microseconds>(this->t2 - this->t1);
-       this->microseconds = duration.count();
-
-    }
     void setIndices(int inicio, int passo, int fim){
         this->indices = rangeIndices(inicio, passo, fim);
     }
@@ -115,18 +99,15 @@ int main(int argc, char const *argv[])
         
         fim = fim + P;
         
-      
-                
+       
         
     }
 
     for (auto &th:threads){
-     
-        //th.start();
+
 
         th.th = std::thread (Produtothread2,M1,M2,th.indices, std::ref(th.Prod),std::ref(th.microseconds));
-        
-        //th.stop();
+
                   
         
     }
@@ -144,15 +125,10 @@ int main(int argc, char const *argv[])
         if (threads[k].th.joinable()){
 
             threads[k].th.join();
-            //std::cout<<"-------Thread "<<k<< " concluida. Tempo: "<<threads[k].microseconds<<"us"<<std::endl;
-            
-            //threads[k].duracao();
-
-            // tempos.push_back(threads[k].microseconds);
 
              conta_threads ++;
 
-            // salvaArq(threads[k].Prod,n1,m2,threads[k].indices, threads[k].microseconds,std::to_string(k));
+
            
 
         }
@@ -166,7 +142,7 @@ int main(int argc, char const *argv[])
 
     std::vector<long long> tempos;
     k = 0;
-    
+
     for(auto &th:threads){
 
             tempos.push_back(th.microseconds);

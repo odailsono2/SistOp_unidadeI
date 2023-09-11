@@ -32,9 +32,6 @@ C = A*B
 c i,j = sum a[i][k]*b[k][j] k = [1,...,n]
 */
 
-// @brief retorna o indice de 0 ... ( lin_max * col_max - 1)
-// @param lin linha da matriz
-// @param col coluna da matriz
 
 int LinCol_To_Indice(int lin, int col, int lin_max, int col_max){
     /*
@@ -281,6 +278,7 @@ void printMatrix(const std::vector<std::vector<float>>  &M){
     }
 }
 
+
 std::vector<int> rangeIndices(int inicio, int passo, int fim){
     std::vector<int> indices;
 
@@ -291,57 +289,6 @@ std::vector<int> rangeIndices(int inicio, int passo, int fim){
     return indices;
 
 }
-/*
 
-int main(int argc, char const *argv[])
-{
-    int n = 6, m = 14;
-
-    for (size_t i = 0; i < n; i++)
-
-    {
-        for (size_t j= 0; j < m; j++)
-        {
-            std::cout << " c [" << i << ", " <<j << "]";
-        }
-
-        std::cout<<std::endl;
-        
-        
-    }
-
-    for (size_t i = 0; i < n; i++)
-
-    {
-        for (size_t j= 0; j < m; j++)
-        {
-            std::cout << " c [" << LinCol_To_Indice(i,j,n,m) << "]";
-        }
-        std::cout<<std::endl;
-        
-    }
-
-    std:: cout << "comvertendo indice em coordenadas na matriz"<<std::endl;
-
-    std::pair<int,int> coord;
-    int coluna = m;
-
-    for (size_t indice = 0; indice < n*m; indice++)
-
-    {
-        coord = indice_TO_linCol(indice,n,m);
-        std::cout << " c [" << coord.first << ", " << coord.second << "]" ;
-        
-        if (coord.second >= coluna-1){
-            
-            std::cout<<std::endl;
-        }
-    }
-
-    std::cout << indice_TO_linCol( LinCol_To_Indice(10,3,n,m) ,n,m).first << ", " << indice_TO_linCol( LinCol_To_Indice(10,3,n,m) ,n,m).second<< std::endl;
-    
-    return 0;
-}
-*/
 
 #endif
