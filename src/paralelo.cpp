@@ -19,12 +19,13 @@ int main(int argc, char const *argv[])
     std::vector<int> linha;
 
 
-    if (argc != 4 ){
+    if (argc != 5 ){
         std::cout << "Não foram passados parâmetros suficiente na chamada da função main"<< std::endl;
         return 0;
     }
  
     int P = std::stoi(argv[3]); //quantidade por processo
+    int salvar = std::stoi(argv[4]); //quantidade por processo
            
     std::vector<std::vector<int>> M1 = abrirArquivoMatriz(argv[1]);
     n1 = M1.size();
@@ -47,7 +48,7 @@ int main(int argc, char const *argv[])
         if(pid == -1){
             i-=P;
             continue;
-        }        
+        }
 
         if(pid == 0){
             std::vector<int> indices = rangeIndices(indiceStart, 1, indiceStop);        
@@ -58,6 +59,9 @@ int main(int argc, char const *argv[])
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stopTime - startTime).count();
             std::cout << "[" << pid << "] start: " << indiceStart << " ; stop: " << indiceStop << " - Tempo gasto = " << duration << " micro segundos" << std::endl;
 
+            if(i >= n1*m2){
+                salvaArq(produto,n1,m2, indices, duration,std::to_string((n1*m2)/P)+std::to_string(P));
+            }
             qtdProcessos += 1;
             return 0;
         }

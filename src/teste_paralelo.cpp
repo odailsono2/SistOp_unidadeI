@@ -16,10 +16,11 @@ int main(int argc, char const *argv[]){
 
     int Nvezes = 10;
     std::string diretorio_p = "./output/paralelo/";
-
-    for (int i = 0; i< Nvezes ;++i){
+    std::string salvar = "0";
+    
+    for (int i = 0; i < Nvezes ;++i){
         auto nome_arq = "P" + P + "_" + std::to_string(i) + ".txt";        
-        std::string comando = diretorio + " " + output + " " + P + " >> " + diretorio_p + nome_arq;
+        std::string comando = diretorio + " " + output + " " + P + " " + salvar + " >> " + diretorio_p + nome_arq;
         std::cout << comando << std::endl;
         auto startTime = std::chrono::high_resolution_clock::now();
         int status = std::system(comando.c_str());
@@ -31,6 +32,10 @@ int main(int argc, char const *argv[]){
             std::cout << "Comando executado com sucesso em " << duration << " micro segundos." << std::endl;
         } else {
             std::cerr << "Erro ao executar o comando." << std::endl;
+        }
+
+        if(i == Nvezes-1){
+            salvar = "1";
         }
     }
 
