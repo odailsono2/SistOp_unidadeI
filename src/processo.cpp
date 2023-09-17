@@ -27,11 +27,11 @@ int main(int argc, char const *argv[])
     int P = std::stoi(argv[3]); //quantidade por processo
     int salvar = std::stoi(argv[4]); //quantidade por processo
            
-    std::vector<std::vector<int>> M1 = abrirArquivoMatriz(argv[1]);
+    std::vector<std::vector<int>> M1 = abrirArquivoMatrizProcessos(argv[1]);
     n1 = M1.size();
     std::cout << n1 << std::endl;
     
-    std::vector<std::vector<int>> M2 = abrirArquivoMatriz(argv[2]);
+    std::vector<std::vector<int>> M2 = abrirArquivoMatrizProcessos(argv[2]);
     m2 = M2.size();
     std::cout << m2 << std::endl;
 
@@ -53,12 +53,12 @@ int main(int argc, char const *argv[])
         if(pid == 0){
             std::vector<int> indices = rangeIndices(indiceStart, 1, indiceStop);        
             auto startTime = std::chrono::high_resolution_clock::now();
-            std::vector<int> produto = ProdutothreadVector(M1,M2,indices);
+            std::vector<int> produto = ProdutoProcessoVector(M1,M2,indices);
             auto stopTime = std::chrono::high_resolution_clock::now();
 
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stopTime - startTime).count();
             std::cout << "[" << pid << "] start: " << indiceStart << " ; stop: " << indiceStop << " - Tempo gasto = " << duration << " micro segundos" << std::endl;
-
+            
             if(i >= n1*m2){
                 salvaArq(produto,n1,m2, indices, duration,std::to_string((n1*m2)/P)+std::to_string(P));
             }

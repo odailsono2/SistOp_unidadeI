@@ -104,15 +104,32 @@ void calcElementoIJ( const std::vector<int>  &linha, const std::vector<int>  &co
     for (size_t k = 0; k < n1; ++k){
 
         elemento =  linha[k] * coluna[k];
+        std::cout << "linha=" <<linha[k] << " coluna=" <<coluna[k] <<std::endl;
+   
+        produto += elemento;
+    }    
+
+    std::cout << "produto=" << produto << std::endl;
+
+}
+
+void calcElementoIJ( const std::vector<float>  &linha, const std::vector<float>  &coluna, float &produto){
+    
+    float elemento = 0;
+
+    int n1=linha.size();
+
+    produto = 0;
+
+    for (size_t k = 0; k < n1; ++k){
+
+        elemento =  linha[k] * coluna[k];
 
    
         produto += elemento;
     }
 
-
-
 }
-
 
 std::vector<int> linhaMatriz(const std::vector<std::vector<int>> &M1, int indice){
 
@@ -136,6 +153,34 @@ std::vector<int> colunaMatriz(const std::vector<std::vector<int>> &M1, int indic
 
     for(int k = 0; k < N; ++k){
         coluna[k] = M1[k][indice];
+        
+    }
+    //printVetor(coluna);
+    return coluna;
+}
+
+
+std::vector<float> linhaMatriz(const std::vector<std::vector<float>> &M1, int indice){
+
+    int N = M1[indice].size();
+
+    std::vector<float>  linha(N);
+
+    for(int i = 0; i < N; ++i){
+        linha[i] = M1[indice][i];
+    }
+
+    return linha;
+}
+
+std::vector<float> colunaMatriz(const std::vector<std::vector<float>> &M1, int indice){
+
+    int N = M1.size();
+
+    std::vector<float>  coluna(N);
+
+    for(int k = 0; k < N; ++k){
+        coluna[k] = M1[k][indice];
       //  std::cout<<"linha "<< k <<"col "<< indice<< "Elemento: "<< M1[k][indice]<<std::endl;
         
     }
@@ -144,7 +189,7 @@ std::vector<int> colunaMatriz(const std::vector<std::vector<int>> &M1, int indic
 }
 
 
-std::vector<std::vector<int>> Produtothread(const std::vector<std::vector<int>> &M1, 
+std::vector<std::vector<int>> ProdutoProcesso(const std::vector<std::vector<int>> &M1, 
             const std::vector<std::vector<int>> &M2, std::vector<int> indices ){
     
        
@@ -152,12 +197,47 @@ std::vector<std::vector<int>> Produtothread(const std::vector<std::vector<int>> 
     
     int m2 = M2[0].size();
     
-    int elemento;
+    int elemento = 0;
     
     std::vector<std::vector<int>> Prod(n1, std::vector<int> (m2,0));
 
     std::vector<int> linha;
     std::vector<int> coluna;
+
+    int i, j;
+
+    for (auto coord_ij:indices){
+
+        i = indice_TO_linCol(coord_ij,n1,m2).first;
+        j = indice_TO_linCol(coord_ij,n1,m2).second;
+        std::cout << "i=" << i << ", j=" << j << std::endl;        
+        linha = linhaMatriz(M1,i);
+        coluna = colunaMatriz(M2,j);
+        calcElementoIJ(linha,coluna,elemento);
+        
+        Prod[i][j] = elemento;
+
+
+    }
+
+    return Prod;
+}
+
+
+std::vector<std::vector<float>> Produtothread(const std::vector<std::vector<float>> &M1, 
+            const std::vector<std::vector<float>> &M2, std::vector<int> indices ){
+    
+       
+    int n1 = M1.size();
+    
+    int m2 = M2[0].size();
+    
+    float elemento;
+    
+    std::vector<std::vector<float>> Prod(n1, std::vector<float> (m2,0));
+
+    std::vector<float> linha;
+    std::vector<float> coluna;
 
     int i, j;
 
@@ -187,20 +267,51 @@ std::vector<std::vector<int>> Produtothread(const std::vector<std::vector<int>> 
     return Prod;
 }
 
-std::vector<int> ProdutothreadVector(const std::vector<std::vector<int>> &M1, 
+std::vector<int> ProdutoProcessoVector(const std::vector<std::vector<int>> &M1, 
             const std::vector<std::vector<int>> &M2, const std::vector<int> &indices ){
+        
+    
+    int n1 = M1.size();
+    int m2 = M2[0].size();
+    int elemento;
+
+
+    
+    std::vector<int> Prod;
+    std::vector<int> linha;
+    std::vector<int> coluna;
+
+    int i, j;
+    
+    
+    for (auto coord_ij:indices){
+        i = indice_TO_linCol(coord_ij,n1,m2).first;
+        j = indice_TO_linCol(coord_ij,n1,m2).second;        
+        linha = linhaMatriz(M1,i);    
+        coluna = colunaMatriz(M2,j);       
+        std::cout << "i=" << i << ", j=" << j << std::endl;             
+        calcElementoIJ(linha,coluna,std::ref(elemento));                
+        
+        Prod.push_back( elemento);
+    }
+
+    return Prod;
+}
+
+std::vector<float> ProdutothreadVector(const std::vector<std::vector<float>> &M1, 
+            const std::vector<std::vector<float>> &M2, const std::vector<int> &indices ){
     
        
     int n1 = M1.size();
     
     int m2 = M2[0].size();
     
-    int elemento;
+    float elemento;
     
-    std::vector<int> Prod;
+    std::vector<float> Prod;
 
-    std::vector<int> linha;
-    std::vector<int> coluna;
+    std::vector<float> linha;
+    std::vector<float> coluna;
 
     int i, j;
 
@@ -210,8 +321,15 @@ std::vector<int> ProdutothreadVector(const std::vector<std::vector<int>> &M1,
         j = indice_TO_linCol(coord_ij,n1,m2).second;
         
         linha = linhaMatriz(M1,i);
-    
-        coluna = colunaMatriz(M2,j);            
+
+        //std::cout<<"Linha:"<<std::endl;
+        //printVetor(linha);
+
+      
+        coluna = colunaMatriz(M2,j);
+            
+        //std::cout<<"Coluna:"<<std::endl;
+        //printVetor(coluna);
 
         calcElementoIJ(linha,coluna,elemento);
         
@@ -223,10 +341,32 @@ std::vector<int> ProdutothreadVector(const std::vector<std::vector<int>> &M1,
     return Prod;
 }
 
-void Produtothread2(const std::vector<std::vector<int>> &M1, 
+void ProdutoProcesso(const std::vector<std::vector<int>> &M1, 
             const std::vector<std::vector<int>> &M2, 
             const std::vector<int> &indices , 
             std::vector<int> &Prod, 
+            long long &microsecond){
+
+    auto start = std::chrono::high_resolution_clock::now();
+
+    Prod = ProdutoProcessoVector(M1,M2,indices);
+
+    auto end = std::chrono::high_resolution_clock::now();
+
+    // Calcula a diferença de tempo
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    
+    // Converte a duração para um valor numérico (microsegundos)
+    microsecond = duration.count();
+    
+    std::cout<<"-------Thread "<<std::this_thread::get_id()<< " concluida. Tempo: "<<microsecond<<" us"<<std::endl;
+            
+}
+
+void Produtothread2(const std::vector<std::vector<float>> &M1, 
+            const std::vector<std::vector<float>> &M2, 
+            const std::vector<int> &indices , 
+            std::vector<float> &Prod, 
             long long &microsecond){
 
     auto start = std::chrono::high_resolution_clock::now();
